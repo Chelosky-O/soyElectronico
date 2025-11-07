@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: soyelectronico_db
+    environment:
+      POSTGRES_DB: soyelectronico_db
+      POSTGRES_USER: soye_user
+      POSTGRES_PASSWORD: soye_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      # 👇 Cambiar esta línea:
+      - postgres_data:/var/lib/postgresql
+volumes:
+  postgres_data:

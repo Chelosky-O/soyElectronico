@@ -1,4 +1,3 @@
-
 CREATE TABLE usuarios (
     id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre           VARCHAR(100) NOT NULL,
