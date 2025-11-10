@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/health").permitAll()
                 // Catálogo público
                 .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
-                // Ver detalle de producto publico, se puede cambiar por authenticated() por ahora publico RECORDAR CAMBIAR EN CASO DE
-                .requestMatchers(HttpMethod.GET, "/api/productos/*").permitAll()
+                // Ver detalle de producto, por lo pedido en pdf requiere ser autenticado
+                .requestMatchers(HttpMethod.GET, "/api/productos/*").authenticated()
                 // Crear/editar/borrar productos SOLO admin
                 .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")
