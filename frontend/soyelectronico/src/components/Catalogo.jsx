@@ -102,41 +102,41 @@ function Catalogo({ auth }) {
         </div>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {productos.map((p) => (
           <div
             key={p.id}
-            className="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col justify-between shadow-sm"
+            className="bg-white border border-gray-200 rounded-xl p-3 flex flex-col shadow-sm hover:shadow-md transition-shadow"
           >
-            <div>
-              <h3 className="font-semibold text-lg mb-1 text-gray-900">
-                {p.nombre}
-              </h3>
-              {p.descripcion && (
-                <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                  {p.descripcion}
-                </p>
-              )}
-              <p className="text-emerald-600 font-bold text-lg">
-                ${Number(p.precio).toLocaleString("es-CL")}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                Stock:{" "}
-                <span
-                  className={
-                    p.stock > 0 ? "text-emerald-600" : "text-red-500"
-                  }
-                >
-                  {p.stock}
-                </span>
-              </p>
-            </div>
+      <div>
+        <div className="w-full aspect-square mb-2 overflow-hidden rounded-lg bg-gray-100 flex items-center justify-center">
+          <img
+            src={p.imagenUrl || "/placeholder.png"}
+            alt={p.nombre}
+            className="object-cover w-full h-full"
+          />
+        </div>
+        <h3 className="font-semibold text-sm mb-0.5 text-gray-900 line-clamp-1">
+          {p.nombre}
+        </h3>
+        {p.categoria && (
+          <p className="text-xs text-gray-500 mb-1">{p.categoria}</p>
+        )}
+        {p.descripcion && (
+          <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            {p.descripcion}
+          </p>
+        )}
+        <p className="text-emerald-600 font-bold text-base mb-2">
+          ${Number(p.precio).toLocaleString("es-CL")}
+        </p>
+      </div>
 
             {auth.rol === "cliente" && (
               <button
                 onClick={() => comprar(p.id)}
                 disabled={p.stock <= 0}
-                className="mt-4 w-full px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="mt-auto w-full px-2 py-1 rounded-md bg-emerald-500 hover:bg-emerald-600 text-xs font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {p.stock > 0 ? "Comprar" : "Sin stock"}
               </button>

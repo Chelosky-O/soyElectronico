@@ -55,6 +55,9 @@ public class ProductoController {
                     p.setDescripcion(datos.getDescripcion());
                     p.setPrecio(datos.getPrecio());
                     p.setStock(datos.getStock());
+                    p.setImagenUrl(datos.getImagenUrl());
+                    p.setCategoria(datos.getCategoria());
+                    p.setDetalles(datos.getDetalles());
                     p.setFechaActualizacion(OffsetDateTime.now());
                     Producto actualizado = productoRepository.save(p);
                     return ResponseEntity.ok(actualizado);

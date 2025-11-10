@@ -13,6 +13,9 @@ function AdminProductos({ auth }) {
     descripcion: "",
     precio: "",
     stock: "",
+    imagenUrl: "",
+    categoria: "",
+    detalles: "",
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -79,6 +82,9 @@ function AdminProductos({ auth }) {
       descripcion: form.descripcion,
       precio: precioNum,
       stock: stockNum,
+      imagenUrl: form.imagenUrl,
+      categoria: form.categoria,
+      detalles: form.detalles,
     };
 
     try {
@@ -125,6 +131,9 @@ function AdminProductos({ auth }) {
       descripcion: p.descripcion || "",
       precio: String(p.precio),
       stock: String(p.stock),
+      imagenUrl: p.imagenUrl || "",
+      categoria: p.categoria || "",
+      detalles: p.detalles || "",
     });
     setIsEditing(true);
     setMensaje("");
@@ -214,6 +223,48 @@ function AdminProductos({ auth }) {
               className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row md:items-end md:gap-4">
+          <div className="flex-1">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              URL de imagen
+            </label>
+            <input
+              name="imagenUrl"
+              value={form.imagenUrl}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+              placeholder="https://..."
+            />
+          </div>
+            
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1">
+              Categoría
+            </label>
+            <input
+              name="categoria"
+              value={form.categoria}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+              placeholder="Arduino, Sensores, LEDs..."
+            />
+          </div>
+        </div>
+          
+        <div>
+          <label className="block text-xs font-medium text-gray-700 mb-1">
+            Detalles (descripción larga)
+          </label>
+          <textarea
+            name="detalles"
+            value={form.detalles}
+            onChange={handleChange}
+            rows={3}
+            className="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+            placeholder="Describe el producto con más detalle..."
+          />
         </div>
 
         <div className="flex flex-col md:flex-row md:items-end md:gap-4">
