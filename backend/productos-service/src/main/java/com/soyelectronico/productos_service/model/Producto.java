@@ -30,6 +30,15 @@ public class Producto {
     @Column(name = "fecha_actualizacion")
     private OffsetDateTime fechaActualizacion;
 
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
+    @Column(name = "categoria")
+    private String categoria;
+
+    @Column(name = "detalles")
+    private String detalles;
+
     // Getters y setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -51,4 +60,13 @@ public class Producto {
 
     public OffsetDateTime getFechaActualizacion() { return fechaActualizacion; }
     public void setFechaActualizacion(OffsetDateTime fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
+
+    public String getImagenUrl() { return imagenUrl; }
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl;}
+
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+
+    public String getDetalles() { return detalles; }
+    public void setDetalles(String detalles) { this.detalles = detalles; }
 }

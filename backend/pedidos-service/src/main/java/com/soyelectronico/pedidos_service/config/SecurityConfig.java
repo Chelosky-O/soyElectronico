@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -37,9 +39,9 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/health").permitAll()
                 // Solo clientes pueden comprar
-                .requestMatchers(HttpMethod.POST, "/api/comprar/**").hasRole("CLIENTE")
+                .requestMatchers(HttpMethod.POST, "/api/comprar/**").authenticated()
                 // Ver sus pedidos: solo autenticado (cliente)
-                .requestMatchers(HttpMethod.GET, "/api/pedidos/mios").hasRole("CLIENTE")
+                .requestMatchers(HttpMethod.GET, "/api/pedidos/mios").authenticated()
                 // cualquier otra cosa: autenticado
                 .anyRequest().authenticated()
         );

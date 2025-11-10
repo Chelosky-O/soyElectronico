@@ -8,6 +8,7 @@ import com.soyelectronico.usuarios_service.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,21 +20,22 @@ import java.time.OffsetDateTime;
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder passwordEncoder;
 
     //clave para firmar el token
     private final String jwtSecret = "soy_una_contra_super_ultra_segura_1234567890";
 
-    public AuthService(UsuarioRepository usuarioRepository) {
+    public AuthService(UsuarioRepository usuarioRepository, BCryptPasswordEncoder  passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public LoginResponse login(LoginRequest request) {
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        //if (!passwordEncoder.matches(request.getPassword(), usuario.getPasswordHash())) {
-        if (!request.getPassword().equals(usuario.getPasswordHash())) {
+        if (!passwordEncoder.matches(request.getPassword(), usuario.getPasswordHash())) {
+        //if (!request.getPassword().equals(usuario.getPasswordHash())) {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
@@ -62,8 +64,8 @@ public class AuthService {
         nuevo.setNombre(request.getNombre());
         nuevo.setEmail(request.getEmail());
 
-        // Por ahora sin hash pero esta listo
-        nuevo.setPasswordHash(request.getPassword());
+        String hash = passwordEncoder.encode(request.getPassword());
+        nuevo.setPasswordHash(hash);
 
         // Siempre rol cliente para este endpoint
         nuevo.setRol("cliente");
