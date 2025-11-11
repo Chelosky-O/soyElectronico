@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/health").permitAll()
                 // Catálogo público
                 .requestMatchers(HttpMethod.GET, "/api/productos").permitAll()
-                // Ver detalle de producto, por lo pedido en pdf requiere ser autenticado
-                .requestMatchers(HttpMethod.GET, "/api/productos/*").authenticated()
+                // Ver detalle de producto, por lo pedido en pdf requiere ser autenticado, pero me parece mejor asi, si se desea cambiar, se pone .authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/productos/*").permitAll()
                 // Crear/editar/borrar productos SOLO admin
                 .requestMatchers(HttpMethod.POST, "/api/productos/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasRole("ADMIN")

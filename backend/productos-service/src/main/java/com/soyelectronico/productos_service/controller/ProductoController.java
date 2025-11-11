@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
+@CrossOrigin(origins = "*")
 public class ProductoController {
 
     private final ProductoRepository productoRepository;
@@ -19,15 +20,24 @@ public class ProductoController {
     }
 
     // GET /api/productos  -> público (catálogo)
+    // Soporta:
+    //   ?categoria=iluminacion
+    //   ?q=arduino
     @GetMapping
-    public List<Producto> listar(@RequestParam(required = false) String q) {
+    public List<Producto> listar(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String categoria
+    ) {
+        if (categoria != null && !categoria.isBlank()) {
+            return productoRepository.findByCategoriaIgnoreCase(categoria);
+        }
         if (q != null && !q.isBlank()) {
             return productoRepository.findByNombreContainingIgnoreCase(q);
         }
         return productoRepository.findAll();
     }
 
-    // GET /api/productos/{id} despues requerira token
+    // GET /api/productos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtener(@PathVariable Long id) {
         return productoRepository.findById(id)
@@ -35,17 +45,18 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST /api/productos esto para admin
+    // POST /api/productos  (admin)
     @PostMapping
     public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
         producto.setId(null);
         producto.setFechaCreacion(OffsetDateTime.now());
         producto.setFechaActualizacion(null);
+        // imagenUrl, categoria, detalles etc. ya vienen en el body
         Producto guardado = productoRepository.save(producto);
         return ResponseEntity.ok(guardado);
     }
 
-    // PUT /api/productos/{id} esto para admin
+    // PUT /api/productos/{id}  (admin)
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(@PathVariable Long id,
                                                @RequestBody Producto datos) {
@@ -65,7 +76,7 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE /api/productos/{id} esto para admin
+    // DELETE /api/productos/{id}  (admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         if (!productoRepository.existsById(id)) {
