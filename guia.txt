@@ -1,8 +1,4 @@
-run Docker db: docker compose -f docker-compose-db.yml up -d
-
-
-en db para hacer algo se ingresa con: psql -h localhost -p 5432 -U soye_user -d soyelectronico_db en el docker (mas facil)
-
+DB NeonDB por ahora
 
 Frontend
 iniciar: npm run dev
