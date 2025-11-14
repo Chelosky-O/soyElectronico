@@ -18,6 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+// Configura la seguridad HTTP del servicio: CORS, JWT y permisos por rol y endpoint
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

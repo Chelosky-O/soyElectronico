@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+// Controlador REST que maneja el login y registro de usuarios mediante AuthService
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")

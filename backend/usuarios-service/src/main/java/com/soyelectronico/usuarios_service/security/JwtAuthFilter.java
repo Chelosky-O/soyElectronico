@@ -17,11 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 
+// Filtro JWT que valida el token en cada petición y autentica al usuario en el contexto de Spring
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final String jwtSecret = "soy_una_contra_super_ultra_segura_1234567890"; // misma clave que usas al generar
-
+    // Método principal que intercepta cada petición HTTP para validar el token
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -32,15 +33,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-
+            // Extrae el token sin el prefijo "Bearer "
             try {
                 Claims claims = Jwts.parser()
                         .setSigningKey(jwtSecret.getBytes())
                         .parseClaimsJws(token)
                         .getBody();
-
+                // Valida y decodifica el token JWT para obtener sus claims (datos)
                 String email = claims.get("email", String.class);
                 String rol = claims.get("rol", String.class);
+                // Extrae el email y el rol del token
 
                 // Crea un objeto de autenticación con los datos del token
                 User principal = new User(email, "", Collections.emptyList());

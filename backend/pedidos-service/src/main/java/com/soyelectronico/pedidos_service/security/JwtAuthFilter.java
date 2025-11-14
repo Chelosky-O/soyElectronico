@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
+// Filtro JWT que valida el token, extrae los datos del usuario y los deja disponibles para los controladores
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 

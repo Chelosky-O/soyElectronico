@@ -23,6 +23,7 @@ public class ProductoController {
     // Soporta:
     //   ?categoria=iluminacion
     //   ?q=arduino
+    // Lista productos, permitiendo filtrar por término de búsqueda (q) o por categoría
     @GetMapping
     public List<Producto> listar(
             @RequestParam(required = false) String q,
@@ -37,6 +38,7 @@ public class ProductoController {
         return productoRepository.findAll();
     }
 
+    // Obtiene un producto por su id y devuelve 404 si no existe
     // GET /api/productos/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Producto> obtener(@PathVariable Long id) {
@@ -45,6 +47,7 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Crea un nuevo producto, asignando fecha de creación y guardándolo en la base de datos
     // POST /api/productos  (admin)
     @PostMapping
     public ResponseEntity<Producto> crear(@RequestBody Producto producto) {
@@ -56,6 +59,7 @@ public class ProductoController {
         return ResponseEntity.ok(guardado);
     }
 
+    // Actualiza los datos de un producto existente y registra la fecha de actualización
     // PUT /api/productos/{id}  (admin)
     @PutMapping("/{id}")
     public ResponseEntity<Producto> actualizar(@PathVariable Long id,
@@ -76,6 +80,7 @@ public class ProductoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Elimina un producto por id y devuelve 204 si se borra o 404 si no existe
     // DELETE /api/productos/{id}  (admin)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {

@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.List;
 
 
-@Configuration                  //Es una clase de configuración de Spring
+@Configuration                  //Clase de configuración de Spring
 @EnableWebSecurity              //Activa la configuración personalizada de seguridad
 public class SecurityConfig {
 
@@ -37,12 +37,13 @@ public class SecurityConfig {
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        // permitimos rutas sin autenticación y protegemos las demás
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/health", "/api/login", "/api/usuarios/registro").permitAll() // públicos o sea sin token requerido
                 .anyRequest().authenticated() // todo lo demás requiere token (quizas esto lo cambie aun no se :P)
         );
 
-        // Registramos nuestro filtro antes del de autenticación por username/password
+        // Registramos filtro antes del de autenticación por username/password
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         // No usamos login form ni HTTP Basic
@@ -51,11 +52,14 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    //Configura un codificador de contraseñas usando el algoritmo BCrypt
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Configura CORS permitiendo peticiones del frontend y define métodos, headers y credenciales
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();

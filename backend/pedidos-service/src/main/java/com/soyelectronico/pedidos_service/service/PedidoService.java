@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 
+// Servicio que gestiona la compra: valida stock, actualiza el producto y crea el pedido
 @Service
 public class PedidoService {
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// Controlador REST que gestiona compras y pedidos del usuario autenticado
 @RestController
 @RequestMapping("/api")
 public class PedidoController {
@@ -24,12 +25,8 @@ public class PedidoController {
         this.pedidoRepository = pedidoRepository;
     }
 
-    /**
-     * Endpoint para comprar un producto.
-     * Solo debería ser usado por usuarios con rol "cliente".
-     *
-     * POST /api/comprar/{productoId}
-     */
+
+    // Realiza la compra de un producto para el usuario autenticado con rol cliente
     @PostMapping("/comprar/{productoId}")
     public ResponseEntity<?> comprar(@PathVariable Long productoId,
                                      @RequestBody CompraRequest request,
@@ -71,11 +68,7 @@ public class PedidoController {
         }
     }
 
-    /**
-     * Endpoint para obtener los pedidos del usuario autenticado.
-     *
-     * GET /api/pedidos/mios
-     */
+    // Devuelve la lista de pedidos del usuario actualmente autenticado
     @GetMapping("/pedidos/mios")
     public ResponseEntity<?> misPedidos(HttpServletRequest httpRequest) {
         String usuarioIdStr = (String) httpRequest.getAttribute("usuarioId");

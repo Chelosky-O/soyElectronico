@@ -1,5 +1,6 @@
 package com.soyelectronico.usuarios_service.dto;
 
+// DTO(Data Transfer Object) que representa los datos enviados en una solicitud de inicio de sesión
 public class LoginRequest {
         
     private String email;

@@ -18,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+// Filtro JWT que valida el token en cada petición y asigna el rol del usuario al contexto de seguridad
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 

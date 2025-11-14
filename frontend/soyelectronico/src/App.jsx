@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getToken, saveToken, clearToken, decodeJwt } from "./auth";
-import { API_USUARIOS, API_PRODUCTOS } from "./services/api";
+import { API_USUARIOS, API_PRODUCTOS, API_PEDIDOS } from "./services/api";
 
 import Header from "./components/Header";
 import LoginForm from "./components/LoginForm";
@@ -74,6 +74,18 @@ function App() {
           productos: "Error: " + err.message,
         }))
       );
+
+    fetch(`${API_PEDIDOS}/health`)
+      .then((res) => res.text())
+      .then((text) =>
+        setHealth((prev) => ({ ...prev, pedidos: text }))
+      )
+      .catch((err) =>
+        setHealth((prev) => ({
+          ...prev,
+          productos: "Error: " + err.message,
+        }))
+      );
   }, []);
 
   const openAuthModal = (mode = "login") => {
@@ -88,7 +100,7 @@ function App() {
     navigate("/");
   };
 
-  // Ahora, ver detalle → también cambia la URL
+  // ver detalle también cambia la URL
   const handleVerDetalle = (producto) => {
     setSelectedProduct(producto);
     // para que en el header quede marcado "Productos"
@@ -116,13 +128,13 @@ function App() {
   // buscador del header
   const handleGlobalSearch = (term) => {
     const limpio = (term || "").trim();
-    setCatalogCategory(""); // quitamos filtro de categoría
+    setCatalogCategory(""); // quita filtro de categoría
     setCatalogSearchTerm(limpio);
     setView("catalogo");
     navigate("/"); // seguimos usando "/" para home/catalogo
   };
 
-  // desde el hero (kits / iluminación / conectividad)
+  // desde el hero 
   const handleCategoryClick = (categoria) => {
     setCatalogSearchTerm(""); // quitamos búsqueda por nombre
     setCatalogCategory(categoria); // ej: "kits", "iluminacion", "conectividad"
@@ -153,10 +165,9 @@ function App() {
       <main className="flex-1">
         <div className="max-w-6xl mx-auto px-4 py-6 space-y-8">
           {inSharedProductRoute ? (
-            // ⚡ Modo "link compartido" → siempre mostramos DETALLE
             <DetallesProducto
-              producto={selectedProduct}          // si venimos desde catálogo, ya está
-              productoId={sharedProductId}        // si entramos directo, se usará esto para fetch
+              producto={selectedProduct}
+              productoId={sharedProductId}        
               auth={auth}
               onNeedLogin={() => openAuthModal("login")}
               onBack={() => {
@@ -245,6 +256,7 @@ function App() {
           <div className="mt-10 text-xs text-slate-400 flex flex-wrap gap-4 justify-center">
             <span>usuarios-service: {health.usuarios}</span>
             <span>productos-service: {health.productos}</span>
+            <span>pedidos-service: {health.pedidos}</span>
           </div>
         </div>
       </main>
@@ -270,7 +282,6 @@ function App() {
   );
 }
 
-/* ---------- Home: hero + 4 productos ---------- */
 function HomePage({
   auth,
   onNeedLogin,
@@ -344,12 +355,6 @@ function HeroTienda({
           <div className="mt-4 flex flex-wrap gap-4 text-[11px] text-slate-500">
             <div className="flex items-center gap-1.5">
               <span className="text-emerald-500">●</span> Stock en tiempo real
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-emerald-500">●</span> Pedidos asociados a tu cuenta
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-emerald-500">●</span> Sistema con roles: admin / cliente
             </div>
           </div>
         </div>

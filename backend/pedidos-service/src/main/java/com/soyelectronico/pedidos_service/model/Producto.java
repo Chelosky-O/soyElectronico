@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+// Entidad JPA que representa la tabla 'productos' con su información básica y fechas de registro
 @Entity
 @Table(name = "productos")
 public class Producto {

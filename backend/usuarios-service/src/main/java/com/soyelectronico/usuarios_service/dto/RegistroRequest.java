@@ -1,5 +1,6 @@
 package com.soyelectronico.usuarios_service.dto;
 
+// DTO que representa los datos enviados para registrar un nuevo usuario
 public class RegistroRequest {
 
     private String nombre;

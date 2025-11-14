@@ -16,6 +16,7 @@ import java.util.Date;
 import org.springframework.dao.DataIntegrityViolationException;
 import java.time.OffsetDateTime;
 
+// Servicio que maneja la autenticación y registro de usuarios
 @Service
 public class AuthService {
 
@@ -29,7 +30,7 @@ public class AuthService {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
+    // Inicia sesión verificando las credenciales y generando un token JWT
     public LoginResponse login(LoginRequest request) {
         Usuario usuario = usuarioRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
@@ -51,7 +52,7 @@ public class AuthService {
 
         return new LoginResponse(token);
     }
-
+    // Registra un nuevo usuario con rol "cliente" y contraseña cifrada
     public Usuario registrarCliente(RegistroRequest request) {
 
         // Comprobar que no exista otro usuario con el mismo email

@@ -184,10 +184,6 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
         </button>
       </form>
 
-      <p className="mt-4 text-[11px] text-slate-400 text-center">
-        Tus datos se guardan de forma segura. Este proyecto es de práctica, no
-        procesa pagos reales.
-      </p>
     </div>
   );
 }

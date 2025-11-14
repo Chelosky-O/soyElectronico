@@ -3,6 +3,7 @@ package com.soyelectronico.pedidos_service.model;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
+// Entidad JPA que representa la tabla 'pedidos' con la información de cada compra realizada
 @Entity
 @Table(name = "pedidos")
 public class Pedido {

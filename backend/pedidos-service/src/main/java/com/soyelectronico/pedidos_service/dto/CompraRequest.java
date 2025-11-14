@@ -1,5 +1,6 @@
 package com.soyelectronico.pedidos_service.dto;
 
+// DTO que representa la cantidad solicitada al comprar un producto
 public class CompraRequest {
 
     private Integer cantidad;
