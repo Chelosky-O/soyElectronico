@@ -19,7 +19,7 @@ El proyecto será desarrollado con una arquitectura de **microservicios**.
 - **TailwindCSS (v4.0)**  
 
 ### 🗃️ Base de datos
-- **PostgreSQL v16 (NeonDB cloud)**
+- **PostgreSQL v16 (en NeonDB)**
 - Tablas:
   - `usuarios(id, nombre, email, password_hash, rol)`
   - `productos(id, nombre, descripcion, precio, stock, imagen_url, categoria, detalles)`
