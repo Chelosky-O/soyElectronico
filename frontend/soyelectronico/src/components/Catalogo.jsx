@@ -18,9 +18,45 @@ export default function Catalogo({
   const [mensaje, setMensaje] = useState("");
   const [toast, setToast] = useState(null);
 
+  // categorías disponibles y categoría seleccionada
+  const [availableCategories, setAvailableCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(
+    (categoria || "").trim()
+  );
+
   const isAdmin = auth?.rol === "admin";
   const isCliente = auth?.rol === "cliente";
 
+  // Sincronizar categoría inicial que viene desde App/Hero
+  useEffect(() => {
+    setSelectedCategory((categoria || "").trim());
+  }, [categoria]);
+
+  // 1) Cargar TODAS las categorías desde todos los productos (sin filtros)
+  useEffect(() => {
+    if (homeMode) return; // en home no necesitamos selector de categoría
+
+    fetch(`${API_PRODUCTOS}/productos`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al cargar categorías");
+        return res.json();
+      })
+      .then((data) => {
+        const cats = new Set();
+        data.forEach((p) => {
+          if (p.categoria && typeof p.categoria === "string") {
+            cats.add(p.categoria);
+          }
+        });
+        setAvailableCategories(Array.from(cats).sort());
+      })
+      .catch((err) => {
+        console.error(err);
+        // no rompemos la vista si falla, solo dejamos sin categorías
+      });
+  }, [homeMode]);
+
+  // 2) Cargar productos (con filtro por categoría / búsqueda)
   useEffect(() => {
     setLoading(true);
     setError("");
@@ -28,7 +64,7 @@ export default function Catalogo({
     let url = `${API_PRODUCTOS}/productos`;
 
     if (!homeMode) {
-      const cat = (categoria || "").trim();
+      const cat = (selectedCategory || "").trim();
       const term = (searchTerm || "").trim();
 
       if (cat.length > 0) {
@@ -54,7 +90,7 @@ export default function Catalogo({
         setError("No se pudo cargar el catálogo");
       })
       .finally(() => setLoading(false));
-  }, [homeMode, searchTerm, categoria]);
+  }, [homeMode, searchTerm, selectedCategory]);
 
   const comprar = async (productoId) => {
     if (!isCliente) {
@@ -134,8 +170,8 @@ export default function Catalogo({
   const titulo = homeMode ? "Productos destacados" : "Todos los productos";
   const subtitulo = homeMode
     ? "Algunos de los componentes que puedes encontrar en la tienda."
-    : (categoria && categoria.trim().length > 0)
-    ? `Explorando categoría "${categoria.trim()}".`
+    : selectedCategory && selectedCategory.length > 0
+    ? `Explorando categoría "${selectedCategory}".`
     : searchTerm && searchTerm.trim().length > 0
     ? `Mostrando resultados para "${searchTerm.trim()}".`
     : "Explora el catálogo completo.";
@@ -143,15 +179,36 @@ export default function Catalogo({
   return (
     <section className="space-y-4" id={homeMode ? undefined : "catalogo"}>
       {/* Encabezado */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-slate-900">{titulo}</h2>
           <p className="text-xs text-slate-500">{subtitulo}</p>
         </div>
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-slate-500 self-start sm:self-auto">
           {productos.length} {homeMode ? "mostrados" : "encontrados"}
         </span>
       </div>
+
+      {/* Filtro por categoría (solo en vista catálogo) */}
+      {!homeMode && availableCategories.length > 0 && (
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <label className="text-xs font-semibold text-slate-600">
+            Filtrar por categoría
+          </label>
+          <select
+            className="w-full sm:w-64 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Todas las categorías</option>
+            {availableCategories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {mensaje && (
         <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-2 rounded-md">

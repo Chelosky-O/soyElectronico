@@ -154,6 +154,10 @@ function App() {
           if (v === "home" || v === "catalogo") navigate("/");
           if (v === "misPedidos") navigate("/"); // seguimos en "/" pero otra vista
           if (v === "adminProductos") navigate("/"); // idem
+          if (view === "catalogo" && v !== "catalogo") {
+            setCatalogCategory("");
+            setCatalogSearchTerm("");
+          }
         }}
         onLogout={handleLogout}
         onLoginClick={() => openAuthModal("login")}
@@ -371,7 +375,7 @@ function HeroTienda({
             <h3 className="font-semibold text-s mb-1">
               Kits Arduino & sensores básicos
             </h3>
-            <p className="text-s text-emerald-50">
+            <p className="text-[13px] text-emerald-50">
               Ideal para aprender electrónica y programación sin complicarte.
             </p>
           </div>
@@ -381,7 +385,7 @@ function HeroTienda({
               onClick={() => onCategoryClick && onCategoryClick("iluminacion")}
             >
               <p className="text-[15px] text-slate-500 mb-1">Iluminación</p>
-              <p className="text-s font-semibold text-slate-900">
+              <p className="text-[13px] font-semibold text-slate-900">
                 Tiras LED RGB, matrices y módulos.
               </p>
             </div>
@@ -392,7 +396,7 @@ function HeroTienda({
               }
             >
               <p className="text-[15px] text-slate-500 mb-1">Conectividad</p>
-              <p className="text-s font-semibold text-slate-900">
+              <p className="text-[13px] font-semibold text-slate-900">
                 Jumpers, cables dupont y terminales.
               </p>
             </div>
