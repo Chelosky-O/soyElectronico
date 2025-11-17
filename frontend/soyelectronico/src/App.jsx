@@ -365,13 +365,13 @@ function HeroTienda({
             className="bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl p-4 text-white shadow-lg cursor-pointer hover:opacity-90"
             onClick={() => onCategoryClick && onCategoryClick("kits")}
           >
-            <p className="text-xs uppercase tracking-wide mb-1">
+            <p className="text-s uppercase tracking-wide mb-1">
               Para empezar
             </p>
-            <h3 className="font-semibold text-sm mb-1">
+            <h3 className="font-semibold text-s mb-1">
               Kits Arduino & sensores básicos
             </h3>
-            <p className="text-[11px] text-emerald-50">
+            <p className="text-s text-emerald-50">
               Ideal para aprender electrónica y programación sin complicarte.
             </p>
           </div>
@@ -380,8 +380,8 @@ function HeroTienda({
               className="bg-slate-50 rounded-2xl p-3 border border-slate-200 cursor-pointer hover:bg-slate-100"
               onClick={() => onCategoryClick && onCategoryClick("iluminacion")}
             >
-              <p className="text-[11px] text-slate-500 mb-1">Iluminación</p>
-              <p className="text-xs font-semibold text-slate-900">
+              <p className="text-[15px] text-slate-500 mb-1">Iluminación</p>
+              <p className="text-s font-semibold text-slate-900">
                 Tiras LED RGB, matrices y módulos.
               </p>
             </div>
@@ -391,8 +391,8 @@ function HeroTienda({
                 onCategoryClick && onCategoryClick("conectividad")
               }
             >
-              <p className="text-[11px] text-slate-500 mb-1">Conectividad</p>
-              <p className="text-xs font-semibold text-slate-900">
+              <p className="text-[15px] text-slate-500 mb-1">Conectividad</p>
+              <p className="text-s font-semibold text-slate-900">
                 Jumpers, cables dupont y terminales.
               </p>
             </div>

@@ -10,7 +10,21 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
   const [error, setError] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  // Si el modal se abre con otro modo, sincronizamos
+  // Para mostrar la checklist visual
+  const [passwordChecks, setPasswordChecks] = useState({
+    hasMinLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+  });
+
+  const getPasswordChecks = (value) => {
+    const hasMinLength = value.length >= 8;
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+
+    return { hasMinLength, hasUppercase, hasLowercase };
+  };
+
   useEffect(() => {
     setMode(initialMode);
     setError("");
@@ -23,6 +37,21 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
     e.preventDefault();
     setError("");
     setMensaje("");
+
+    // Validaciones SOLO en registro
+    if (!isLogin) {
+      const checks = getPasswordChecks(password);
+      const isValid =
+        checks.hasMinLength && checks.hasUppercase && checks.hasLowercase;
+
+      if (!isValid) {
+        setError(
+          "La contraseña debe tener mínimo 8 caracteres, una mayúscula y una minúscula."
+        );
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -56,6 +85,11 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
 
         setMensaje("Cuenta creada correctamente 🎉 Ahora inicia sesión.");
         setPassword("");
+        setPasswordChecks({
+          hasMinLength: false,
+          hasUppercase: false,
+          hasLowercase: false,
+        });
         setMode("login");
       }
     } catch (err) {
@@ -66,9 +100,15 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordChecks(getPasswordChecks(value));
+  };
+
   return (
     <div className="w-full">
-      {/* Encabezado con gradiente */}
+      {/* Encabezado */}
       <div className="mb-5">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-xs mb-3">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -84,7 +124,7 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
         </p>
       </div>
 
-      {/* Tabs login / registro */}
+      {/* Tabs */}
       <div className="flex mb-4 rounded-lg bg-slate-100 p-1 text-xs font-medium">
         <button
           type="button"
@@ -118,7 +158,7 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
             </label>
             <input
               type="text"
-              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Ej: Juan Pérez"
@@ -133,11 +173,10 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
           </label>
           <input
             type="email"
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
             placeholder="tucorreo@ejemplo.com"
-            autoComplete="email"
             required
           />
         </div>
@@ -148,27 +187,56 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
           </label>
           <input
             type="password"
-            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-200 text-sm"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             placeholder={isLogin ? "Tu contraseña" : "Crea una contraseña segura"}
-            autoComplete={isLogin ? "current-password" : "new-password"}
             required
           />
+
+          {/* Checklist visual */}
+          {!isLogin && (
+            <div className="mt-2 text-xs space-y-1">
+              <p
+                className={`${
+                  passwordChecks.hasMinLength ? "text-emerald-600" : "text-red-500"
+                }`}
+              >
+                {passwordChecks.hasMinLength ? "✔" : "✖"} Mínimo 8 caracteres
+              </p>
+              <p
+                className={`${
+                  passwordChecks.hasUppercase ? "text-emerald-600" : "text-red-500"
+                }`}
+              >
+                {passwordChecks.hasUppercase ? "✔" : "✖"} Al menos 1 mayúscula
+              </p>
+              <p
+                className={`${
+                  passwordChecks.hasLowercase ? "text-emerald-600" : "text-red-500"
+                }`}
+              >
+                {passwordChecks.hasLowercase ? "✔" : "✖"} Al menos 1 minúscula
+              </p>
+            </div>
+          )}
         </div>
 
+        {/* Mensaje de error */}
         {error && (
           <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
             {error}
           </div>
         )}
 
+        {/* Mensaje de éxito */}
         {mensaje && (
           <div className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-3 py-2">
             {mensaje}
           </div>
         )}
 
+        {/* Botón sin bloqueo */}
         <button
           type="submit"
           disabled={loading}
@@ -183,7 +251,6 @@ export default function LoginForm({ onLoginSuccess, initialMode = "login" }) {
             : "Registrarme"}
         </button>
       </form>
-
     </div>
   );
 }
